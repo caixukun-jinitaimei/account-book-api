@@ -1,0 +1,56 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">简易记账</string>
+    <string name="title_activity_nav">NavActivity</string>
+    <string name="title_record">账单</string>
+    <string name="title_general">概览</string>
+    <string name="title_photo">拍照</string>
+    <string name="title_me">我的</string>
+    <!--登陆注册-->
+    <string name="username">用户名</string>
+    <string name="login_txt">登录</string>
+    <string name="register_txt">注册</string>
+    <string name="sex">性别</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="work">工作</string>
+    <string name="income">年薪</string>
+    <string name="wealth_management">理财方式</string>
+    <string name="age">年龄</string>
+    <string name="password">密码</string>
+    <string name="repassword">确认密码</string>
+    <string name="hint_username">请输入用户名</string>
+    <string name="hint_password">请输入密码</string>
+    <string name="hint_repassword">再次请输入密码</string>
+    <string name="hint_work">你的工作</string>
+    <string name="hint_income">你的年薪</string>
+    <string name="hint_wealth_management">目前的理财方式</string>
+    <string name="hint_age">你的年龄</string>
+    <!--登录注册-->
+
+    <string name="me_homepage_text">我的主页</string>
+    <string name="me_exit_text">退出登录</string>
+    <string name="me_app_version">V2.0</string>
+
+    <!--个人主页-->
+    <string name="homepage_can_not_modify">不可修改</string>
+    <string name="homepage_btn_update">更新</string>
+    <string name="new_detail_comment">全部评论</string>
+    <!--个人主页-->
+    <string name="app_company" >2023 15070842</string>
+    <string name="app_net_support" >由合合信息提供网络服务</string>
+
+    <string name="loading_summary">正在努力的加载中...</string>
+
+    <!--服务器-->
+    <string name="config_server_config_title">服务器</string>
+    <string name="config_server_config_ip">IP地址:</string>
+    <string name="config_server_config_ip_hint">输入服务器IP地址</string>
+    <string name="config_server_config_port">端口号:</string>
+    <string name="config_server_config_port_hint">输入服务器的端口号</string>
+    <string name="config_btn_save_txt">保存</string>
+    <!--服务器-->
+
+
+    <!--相机-->
+    <string name="camera_bt_txt">拍照</string>
+</resources>
