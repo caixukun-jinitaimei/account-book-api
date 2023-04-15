@@ -1,4 +1,4 @@
-package com.example.accountbook1.model.response;
+package com.example.accountbook1.model.stc;
 
 import com.google.gson.Gson;
 

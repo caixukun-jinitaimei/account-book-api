@@ -1,6 +1,6 @@
-package com.example.accountbook1.model.request;
+package com.example.accountbook1.model.cts;
 
-public class UserRecord {
+public class BookEntry {
     private String date;
     private String time;
     private int type;
@@ -9,7 +9,7 @@ public class UserRecord {
     private String GoodsShops;
     private String GoodsPrice;
 
-    public UserRecord(String date,String time,int type,String label,String GoodsName,String GoodsShops,String GoodsPrice){
+    public BookEntry(String date, String time, int type, String label, String GoodsName, String GoodsShops, String GoodsPrice){
         this.date = date;
         this.time = time;
         this.type = type;

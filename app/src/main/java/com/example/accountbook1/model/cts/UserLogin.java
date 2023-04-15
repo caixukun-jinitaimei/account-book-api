@@ -1,4 +1,4 @@
-package com.example.accountbook1.model.request;
+package com.example.accountbook1.model.cts;
 
 public class UserLogin {
     private String username;

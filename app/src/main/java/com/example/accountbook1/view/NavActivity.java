@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.accountbook1.R;
-import com.example.accountbook1.fragment.GeneralFragment;
-import com.example.accountbook1.fragment.RecordFragment;
-import com.example.accountbook1.fragment.MeFragment;
+import com.example.accountbook1.ui.GeneralFragment;
+import com.example.accountbook1.ui.RecordFragment;
+import com.example.accountbook1.ui.MeFragment;
 import com.example.accountbook1.adapter.BottomAdapter;
 
 import com.example.accountbook1.utils.StatusBarUtils;

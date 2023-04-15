@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.accountbook1.model.request.UserRegister;
+import com.example.accountbook1.model.cts.UserRegister;
 import com.example.accountbook1.view.base.BaseActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

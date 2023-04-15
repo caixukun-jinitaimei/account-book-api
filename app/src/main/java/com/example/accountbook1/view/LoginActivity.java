@@ -19,8 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.accountbook1.model.request.UserLogin;
-import com.example.accountbook1.model.response.ErrorResponse;
+import com.example.accountbook1.model.cts.UserLogin;
+import com.example.accountbook1.model.stc.ErrorResponse;
 import com.example.accountbook1.utils.ErrorResponseUtils;
 import com.example.accountbook1.utils.GsonUtils;
 import com.example.accountbook1.view.base.BaseActivity;

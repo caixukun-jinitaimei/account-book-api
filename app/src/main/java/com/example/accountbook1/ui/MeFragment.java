@@ -1,4 +1,4 @@
-package com.example.accountbook1.fragment;
+package com.example.accountbook1.ui;
 
 import androidx.fragment.app.Fragment;
 import android.content.Intent;

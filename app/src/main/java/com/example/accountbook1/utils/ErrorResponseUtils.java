@@ -1,6 +1,6 @@
 package com.example.accountbook1.utils;
 
-import com.example.accountbook1.model.response.ErrorResponse;
+import com.example.accountbook1.model.stc.ErrorResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
