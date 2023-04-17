@@ -1,14 +1,19 @@
 package com.example.accountbook1.view;
 
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+//import android.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.icu.util.Freezable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.accountbook1.R;
 
@@ -18,7 +23,7 @@ import com.example.accountbook1.fragment.RecordFragment;
 import com.example.accountbook1.utils.AppManager;
 import com.example.accountbook1.view.base.BaseActivity;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
     private LinearLayout tabRecord;
     private LinearLayout tabGeneral;
     private LinearLayout tabMe;
@@ -46,23 +51,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
     }
 
-    @Override
+
     protected void findViewById() {
-        tabRecord = $(R.id.bottom_record);
-        tabGeneral = $(R.id.bottom_general);
-        tabMe = $(R.id.bottom_me);
+        tabRecord = findViewById(R.id.bottom_record);
+        tabGeneral = findViewById(R.id.bottom_general);
+        tabMe = findViewById(R.id.bottom_me);
 
-        icoRecord = $(R.id.bottom_ico_record);
-        icoGeneral = $(R.id.bottom_ico_general);
-        icoMe = $(R.id.bottom_ico_me);
+        icoRecord = findViewById(R.id.bottom_ico_record);
+        icoGeneral = findViewById(R.id.bottom_ico_general);
+        icoMe = findViewById(R.id.bottom_ico_me);
 
-        txtRecord = $(R.id.bottom_txt_record);
-        txtGeneral = $(R.id.bottom_txt_general);
-        txtMe = $(R.id.bottom_txt_me);
-        txtTitle = $(R.id.titleText);
+        txtRecord = findViewById(R.id.bottom_txt_record);
+        txtGeneral = findViewById(R.id.bottom_txt_general);
+        txtMe = findViewById(R.id.bottom_txt_me);
+        txtTitle = findViewById(R.id.titleText);
     }
 
-    @Override
+
     protected void initView() {
         tabRecord.setOnClickListener(this);
         tabGeneral.setOnClickListener(this);
@@ -105,7 +110,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param btnId
      */
     private void refreashFragment(int btnId) {
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         switch (btnId) {
             case R.id.bottom_record:
@@ -151,7 +156,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((System.currentTimeMillis() - mExitTime) > 800) {
-                DisplayToast("再按一次退出");
+                Toast.makeText(getApplicationContext(),"再按一次退出",Toast.LENGTH_SHORT);
                 mExitTime = System.currentTimeMillis();
                 return true;
             } else {
