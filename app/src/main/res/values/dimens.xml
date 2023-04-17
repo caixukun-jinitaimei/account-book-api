@@ -50,4 +50,6 @@
     <dimen name="margin_medium" >16dp</dimen>
     <dimen name="margin_large" >32dp</dimen>
     <dimen name="margin_huge" >48dp</dimen>
+    <dimen name="bottom_icon_size">25dip</dimen>
+    <dimen name="bottom_txt_size">12sp</dimen>
 </resources>

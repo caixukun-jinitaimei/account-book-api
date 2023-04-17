@@ -26,4 +26,6 @@
     <color name="colorWhite" >#ffffff</color>
     <color name="grid_state_pressed" >#1Affffff</color>
     <color name="gainsboro">#ffdcdcdc</color>
+    <color name="bottom_tab_pressed">#DC4B38</color>
+    <color name="bottom_tab_normal">#B4B4B4</color>
 </resources>

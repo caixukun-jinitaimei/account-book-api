@@ -1,112 +1,167 @@
 package com.example.accountbook1.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.accountbook1.R;
-import com.example.accountbook1.adapter.OrderAdapter;
-import com.example.accountbook1.model.client.Dao;
-import com.example.accountbook1.model.client.Record;
 
-import com.example.accountbook1.utils.StatusBarUtils;
+import com.example.accountbook1.fragment.GeneralFragment;
+import com.example.accountbook1.fragment.MeFragment;
+import com.example.accountbook1.fragment.RecordFragment;
+import com.example.accountbook1.utils.AppManager;
+import com.example.accountbook1.view.base.BaseActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity extends BaseActivity implements View.OnClickListener {
+    private LinearLayout tabRecord;
+    private LinearLayout tabGeneral;
+    private LinearLayout tabMe;
 
-public class MainActivity extends AppCompatActivity {
-    private LinearLayout OrderNull,bottomView;
-    private View view = null;
-    private RecyclerView OrderRecycler;
-    private TextView TotalPay,TotalIncome;
-    private List<Record> recordList = new ArrayList<>();
-    private Dao dao;
-    private double totalPay = 0,totalIncome = 0;
+
+    private ImageView icoRecord;
+    private ImageView icoGeneral;
+    private ImageView icoMe;
+
+    private TextView txtRecord;
+    private TextView txtGeneral;
+    private TextView txtMe;
+    private TextView txtTitle;
+
+    private GeneralFragment generalFragment;
+    private RecordFragment recordFragment;
+    private MeFragment meFragment;
+    private long mExitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtils.setStatusBarHide(getWindow());
         setContentView(R.layout.activity_main);
-        getRecordList();
-        InitView();
-        showIncomeAndPay();
-        InitRecycler();
+        findViewById();
+        initView();
     }
-    private void InitView(){
-        OrderNull = findViewById(R.id.OrderNull);
-        bottomView = findViewById(R.id.bottomView);
-        OrderRecycler = findViewById(R.id.OrderRecycler);
-        TotalPay = findViewById(R.id.TotalPay);
-        TotalIncome = findViewById(R.id.TotalIncome);
-        dao = new Dao(this);
-    }
-    private void InitRecycler(){
-        OrderRecycler.setLayoutManager(new LinearLayoutManager(this));
-        OrderRecycler.setAdapter(new OrderAdapter(recordList));
 
+    @Override
+    protected void findViewById() {
+        tabRecord = $(R.id.bottom_record);
+        tabGeneral = $(R.id.bottom_general);
+        tabMe = $(R.id.bottom_me);
+
+        icoRecord = $(R.id.bottom_ico_record);
+        icoGeneral = $(R.id.bottom_ico_general);
+        icoMe = $(R.id.bottom_ico_me);
+
+        txtRecord = $(R.id.bottom_txt_record);
+        txtGeneral = $(R.id.bottom_txt_general);
+        txtMe = $(R.id.bottom_txt_me);
+        txtTitle = $(R.id.titleText);
     }
-    private void getRecordList(){
-        recordList = dao.QueryAll();
+
+    @Override
+    protected void initView() {
+        tabRecord.setOnClickListener(this);
+        tabGeneral.setOnClickListener(this);
+        tabMe.setOnClickListener(this);
+
+        recordFragment = new RecordFragment();
+        generalFragment = new GeneralFragment();
+        meFragment = new MeFragment();
+
+        refreashFragment(R.id.bottom_record);
     }
-    /**
-     * 获取RecyclerView数据源*/
-    private void showIncomeAndPay(){
-//        getRecordList();
-        if (recordList == null || recordList.size() == 0){
-            IsEmpty(true);
-            return;
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bottom_record:
+                changeTabState(R.id.bottom_record);
+                changeTitle(R.string.title_record);
+                refreashFragment(R.id.bottom_record);
+                break;
+            case R.id.bottom_general:
+                changeTabState(R.id.bottom_general);
+                changeTitle(R.string.title_found);
+                refreashFragment(R.id.bottom_general);
+                break;
+            case R.id.bottom_me:
+                changeTabState(R.id.bottom_me);
+                changeTitle(R.string.title_me);
+                refreashFragment(R.id.bottom_me);
+                break;
         }
-        for (int i = 0; i < recordList.size(); i++) {
-            /**
-             * 1为支出
-             * 0为收入*/
-            if (recordList.get(i).getType() == 1){
-                totalPay += Double.parseDouble(recordList.get(i).getGoodsPrice());
-            }else {
-                totalIncome += Double.parseDouble(recordList.get(i).getGoodsPrice());
+    }
+
+
+    private void changeTitle(int stringId) {
+        // txtTitle.setText(getResources().getString(stringId));
+    }
+
+    /**
+     * 切换Fragment
+     * @param btnId
+     */
+    private void refreashFragment(int btnId) {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        switch (btnId) {
+            case R.id.bottom_record:
+                transaction.replace(R.id.fragment_container, recordFragment);
+                break;
+            case R.id.bottom_general:
+                transaction.replace(R.id.fragment_container, generalFragment);
+                break;
+            case R.id.bottom_me:
+                transaction.replace(R.id.fragment_container, meFragment);
+                break;
+        }
+        transaction.commit();
+    }
+
+    private void changeTabState(int tabId) {
+        if (tabId == R.id.bottom_record) {
+            icoRecord.setImageResource(R.drawable.icon_train_pressed);
+            txtRecord.setTextColor(getResources().getColor(R.color.bottom_tab_pressed));
+        } else {
+            icoRecord.setImageResource(R.drawable.icon_train_unpressed);
+            txtRecord.setTextColor(getResources().getColor(R.color.bottom_tab_normal));
+        }
+        if (tabId == R.id.bottom_general) {
+            icoGeneral.setImageResource(R.drawable.icon_found_pressed);
+            txtGeneral.setTextColor(getResources().getColor(R.color.bottom_tab_pressed));
+        } else {
+            icoGeneral.setImageResource(R.drawable.icon_found_unpressed);
+            txtGeneral.setTextColor(getResources().getColor(R.color.bottom_tab_normal));
+        }
+
+        if (tabId == R.id.bottom_me) {
+            icoMe.setImageResource(R.drawable.icon_me_pressed);
+            txtMe.setTextColor(getResources().getColor(R.color.bottom_tab_pressed));
+        } else {
+            icoMe.setImageResource(R.drawable.icon_me_unpressed);
+            txtMe.setTextColor(getResources().getColor(R.color.bottom_tab_normal));
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - mExitTime) > 800) {
+                DisplayToast("再按一次退出");
+                mExitTime = System.currentTimeMillis();
+                return true;
+            } else {
+                AppManager.getInstance().killAllActivity();
+                AppManager.getInstance().AppExit(this);
             }
         }
-        IsEmpty(TotalPay,totalPay,1);
-        IsEmpty(TotalIncome,totalIncome,0);
-
-    }
-    private void IsEmpty(TextView view,double price,int flag){
-        if (flag == 1 && price == 0){
-            view.setText("0.00");
-        }else if (flag == 0 && price == 0){
-            view.setText("0.00");
-        }else {
-            view.setText(price+"");
-        }
-    }
-    /**
-     * 判断数据库内容是否为空
-     * 为空显示404界面*/
-    private void IsEmpty(boolean flag){
-        if (flag){
-            OrderNull.setVisibility(View.VISIBLE);
-            bottomView.setVisibility(View.GONE);
-        }else {
-            OrderNull.setVisibility(View.GONE);
-            bottomView.setVisibility(View.VISIBLE);
-        }
-    }
-    public void Exit(View view){
-        finish();
+        return super.onKeyDown(keyCode, event);
     }
 
-    public void Increase(View view){
-        ReturnClass(IncreaseActivity.class);
-    }
-    private void ReturnClass(Class c){
-        startActivity(new Intent(MainActivity.this,c));
-    }
+
 
 }

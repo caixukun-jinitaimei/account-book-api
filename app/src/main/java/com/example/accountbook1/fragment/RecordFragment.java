@@ -1,6 +1,6 @@
-package com.example.accountbook1.ui;
+package com.example.accountbook1.fragment;
 
-import androidx.fragment.app.Fragment;
+import android.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
