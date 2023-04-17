@@ -16,15 +16,11 @@ import com.example.accountbook1.AAChartCoreLib.AAChartEnum.AAChartZoomType;
 import com.example.accountbook1.R;
 import com.example.accountbook1.model.client.Dao;
 import com.example.accountbook1.model.client.Record;
-import com.example.accountbook1.model.client.ViewBar;
 import com.example.accountbook1.utils.StatusBarUtils;
 
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.PointValue;
 
 public class DetailedActivity extends AppCompatActivity {
     private Dao dao;

@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:background="@drawable/splash"
     android:clickable="true"
-    tools:context="com.example.accountbook1.WelcomeActivity">
+    tools:context="com.example.accountbook1.view.WelcomeActivity">
 
     <TextView
         android:id="@+id/start_app"

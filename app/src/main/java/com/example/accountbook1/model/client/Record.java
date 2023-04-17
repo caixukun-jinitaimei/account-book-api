@@ -9,15 +9,7 @@ public class Record {
     private String GoodsShops;
     private String GoodsPrice;
 
-    public Record(String date,String time,int type,String label,String GoodsName,String GoodsPrice,String GoodsShops){
-        this.date = date;
-        this.time = time;
-        this.type = type;
-        this.label = label;
-        this.GoodsName = GoodsName;
-        this.GoodsPrice = GoodsPrice;
-        this.GoodsShops = GoodsShops;
-    }
+
 
     public String getDate() {
         return date;

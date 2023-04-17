@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accountbook1.R;
 import com.example.accountbook1.model.client.Record;
@@ -18,6 +18,9 @@ import java.util.List;
 
 import cn.we.swipe.helper.WeSwipeHelper;
 import cn.we.swipe.helper.WeSwipeProxyAdapter;
+
+//import cn.we.swipe.helper.WeSwipeHelper;
+//import cn.we.swipe.helper.WeSwipeProxyAdapter;
 
 public class OrderAdapter extends WeSwipeProxyAdapter<OrderAdapter.ViewHolder> implements View.OnClickListener {
     private String[] s_select = {"日用百货","文化休闲","交通出行","生活服务","服装装扮","餐饮美食","数码电器","其他标签"};

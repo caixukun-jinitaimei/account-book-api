@@ -2,16 +2,20 @@ package com.example.accountbook1.view;
 
 import static com.example.accountbook1.utils.SimpleDateFormatUtils.sdf;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
 
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,20 +23,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.accountbook1.model.cts.UserLogin;
-import com.example.accountbook1.model.stc.ErrorResponse;
+import com.example.accountbook1.model.c2s.UserLogin;
+import com.example.accountbook1.model.s2c.ErrorMessage;
+import com.example.accountbook1.model.s2c.SuccessMessage;
+import com.example.accountbook1.utils.AppManager;
 import com.example.accountbook1.utils.ErrorResponseUtils;
 import com.example.accountbook1.utils.GsonUtils;
+import com.example.accountbook1.utils.MyOkHttpUtils;
 import com.example.accountbook1.view.base.BaseActivity;
 import com.google.gson.Gson;
 import com.example.accountbook1.R;
 import com.example.accountbook1.model.client.User;
 import com.example.accountbook1.utils.Constants;
 import com.example.accountbook1.utils.SharedPreferencesUtils;
+import com.google.gson.JsonSyntaxException;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
+    private String TITLE_NAME = "登录";
+    private String TAG= "LoginActivity";
     private EditText et_username;
     private EditText et_password;
 
@@ -80,8 +90,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 break;
         }
     }
-
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -133,14 +141,47 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             return;
         }
         String url = Constants.BASE_URL + "/user/login";
-        System.out.println(url);
-        OkHttpUtils
-                .post()
-                .url(url)
-                .id(2)
-                .addParams("body", GsonUtils.gson.toJson(new UserLogin(username,password)))
-                .build()
-                .execute(new MyStringCallback());
+        MyOkHttpUtils.POST(url,new UserLogin(username,password),new MyCallBack());
+    }
+
+    public class MyCallBack implements Callback {
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            String message = "网络链接出错！";
+            System.out.println(message);
+            DisplayToast(message);
+
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+
+            Gson gson = new Gson();
+
+            String bodyStr = response.body().string();
+            try {
+                com.example.accountbook1.model.server.User user = gson.fromJson(bodyStr,com.example.accountbook1.model.server.User.class);
+
+                Log.d(TAG,"login success,"+user.toString());
+//                DisplayToast("欢迎你，"+user.getUid());
+                openActivity(MainActivity.class);
+//                finish();
+            } catch (JsonSyntaxException e) {
+                try {
+                    ErrorMessage errorMessage = gson.fromJson(bodyStr, ErrorMessage.class);
+                    DisplayToast(errorMessage.toString());
+                    Log.d(TAG,errorMessage.toString());
+
+                }catch (JsonSyntaxException e2){
+                    throw new RuntimeException(e2);
+
+                }
+
+                e.printStackTrace();
+            }
+
+        }
     }
 
     public class MyStringCallback extends StringCallback {
@@ -150,10 +191,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             Gson gson = new Gson();
             switch (id) {
                 case 2:
-                    ErrorResponse errorResponse = ErrorResponseUtils.parseError(response);
-                    if (errorResponse != null) {
-                        Toast.makeText(mContext, errorResponse.toString(), Toast.LENGTH_SHORT).show();
-                        System.out.println(errorResponse);
+                    ErrorMessage errorMessage = ErrorResponseUtils.parseError(response);
+                    if (errorMessage != null) {
+                        Toast.makeText(mContext, errorMessage.toString(), Toast.LENGTH_SHORT).show();
+                        System.out.println(errorMessage);
                         break;
                     }
                     User user = gson.fromJson(response, User.class);

@@ -1,10 +1,13 @@
 package com.example.accountbook1.view;
 
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,7 +16,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.accountbook1.model.cts.UserRegister;
+
+import com.example.accountbook1.model.c2s.UserRegister;
+import com.example.accountbook1.model.s2c.ErrorMessage;
+import com.example.accountbook1.model.s2c.SuccessMessage;
+import com.example.accountbook1.utils.MyOkHttpUtils;
 import com.example.accountbook1.view.base.BaseActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -22,11 +29,14 @@ import com.example.accountbook1.model.client.User;
 import com.example.accountbook1.utils.AppManager;
 import com.example.accountbook1.utils.Constants;
 import com.example.accountbook1.utils.SharedPreferencesUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.io.IOException;
 
 public class RegisterActivity extends BaseActivity implements OnClickListener {
     private String TITLE_NAME = "注册";
+    private String TAG= "RegisterActivity";
+
     private View title_back;
     private TextView titleText;
 
@@ -81,10 +91,12 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_back: {
+                Log.d(TAG,"返回按钮");
                 this.finish();
             }
             break;
             case R.id.reg_btn_register:
+                Log.d(TAG,"注册按钮");
                 register();
                 break;
         }
@@ -114,59 +126,95 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
             return;
         }
         UserRegister userRegister = new UserRegister(username, password, sex, job, income, target_management, age);
-        Gson gson = new Gson();
 
+        System.out.println("啊？");
         // 服务端验证
-        String url = Constants.BASE_URL + "/hello";
-        OkHttpUtils
-                .post()
-                .url(url)
-                .addParams("body",gson.toJson(userRegister))
-                .id(1)
-                .build()
-                .execute(new MyStringCallback());
+        String url = Constants.BASE_URL + "/user/register";
 
+        MyOkHttpUtils.POST(url, userRegister,  new MyCallBack());
     }
 
-    public class MyStringCallback extends StringCallback {
+    public class MyCallBack implements Callback {
 
         @Override
-        public void onResponse(String response, int id) {
-            System.out.println(response);
+        public void onFailure(Call call, IOException e) {
+            String message = "网络链接出错！";
+            System.out.println(message);
+            DisplayToast(message);
+
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+
             Gson gson = new Gson();
-            switch (id) {
-                case 1:
-                    User user = null;
-                    try {
-                        user = gson.fromJson(response, User.class);
-                    } catch (JsonSyntaxException e) {
-                        user = null;
-                    }
-                    if (user == null) {
-                        DisplayToast(response);
-                        return;
-                    } else {
-                        // 存储用户
-                        boolean result = SharedPreferencesUtils.saveUserInfo(mContext, user);
-                        if (result) {
-                            Toast.makeText(mContext, "注册成功，请登录！", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(mContext, "用户名密码保存失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    openActivity(LoginActivity.class);
-                    AppManager.getInstance().killAllActivity();
-                    break;
-                default:
-                    DisplayToast("what?");
-                    break;
-            }
-        }
 
-        @Override
-        public void onError(Call arg0, Exception arg1, int arg2) {
-            DisplayToast("网络链接出错！");
+            String bodyStr = response.body().string();
+            try {
+                SuccessMessage successMessage = gson.fromJson(bodyStr, SuccessMessage.class);
+                String successMassage = successMessage.getSuccessMassage();
+                Log.d(TAG,successMassage);
+                DisplayToast(successMassage);
+                openActivity(LoginActivity.class);
+                AppManager.getInstance().killAllActivity();
+            } catch (JsonSyntaxException e) {
+                try {
+                    ErrorMessage errorMessage = gson.fromJson(bodyStr, ErrorMessage.class);
+                    DisplayToast(errorMessage.toString());
+                    Log.d(TAG,errorMessage.toString());
+
+                }catch (JsonSyntaxException e2){
+                    throw new RuntimeException(e2);
+
+                }
+
+                e.printStackTrace();
+            }
+
         }
     }
+//    public class MyStringCallback extends StringCallback {
+//
+//
+//        @Override
+//        public void onResponse(String response, int id) {
+//            System.out.println(response);
+//            Gson gson = new Gson();
+//            switch (id) {
+//                case 1:
+//                    try {
+//                        SuccessMessage successMessage = gson.fromJson(response, SuccessMessage.class);
+//                        String successMassage = successMessage.getSuccessMassage();
+//                        System.out.println(successMassage);
+//                        DisplayToast(successMassage);
+//                        openActivity(LoginActivity.class);
+//                        AppManager.getInstance().killAllActivity();
+//                        break;
+//                    } catch (JsonSyntaxException e) {
+//                        try {
+//                            ErrorMessage errorMessage = gson.fromJson(response, ErrorMessage.class);
+//                            DisplayToast(errorMessage.toString());
+//
+//                        }catch (JsonSyntaxException e2){
+//                            throw new RuntimeException(e2);
+//
+//                        }
+//
+//                        e.printStackTrace();
+//                    }
+//
+//
+//
+//                default:
+//                    DisplayToast("what?");
+//                    break;
+//            }
+//        }
+//
+//        @Override
+//        public void onError(Call arg0, Exception arg1, int arg2) {
+//            DisplayToast("网络链接出错！");
+//        }
+//    }
 }
 

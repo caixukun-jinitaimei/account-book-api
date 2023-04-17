@@ -123,7 +123,7 @@ public class Dao {
                     name = cursor.getString(cursor.getColumnIndex(Helper.Row_Name));
                     price = cursor.getString(cursor.getColumnIndex(Helper.Row_Price));
                     shops = cursor.getString(cursor.getColumnIndex(Helper.Row_Shops));
-                    list.add(new Record(date,time,type,label,name,price,shops));
+//                    list.add(new Record(date,time,type,label,name,price,shops));
                 }
                 DB.close();
                 return list;
